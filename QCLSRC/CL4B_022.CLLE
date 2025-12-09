@@ -1,0 +1,13 @@
+PGM
+DCL        VAR(&FORMAT_I)  TYPE(*CHAR) LEN(10) VALUE('*DTS')
+DCL        VAR(&VAR_I)     TYPE(*CHAR) LEN(8) VALUE(X'8000000000000000')
+DCL        VAR(&FORMAT_O)  TYPE(*CHAR) LEN(10) VALUE('*FAKE')
+DCL        VAR(&VAR_O)     TYPE(*CHAR) LEN(20)
+INCLUDE SRCSTMF('ERRCOD.CLLE')
+CALL PGM(QWCCVTDT) PARM(&FORMAT_I +
+                        &VAR_I   +
+                        &FORMAT_O +
+                        &VAR_O   +
+                        &ERRCOD)
+SNDPGMMSG MSG(&MSGID *BCAT &MSGDTA)
+ENDPGM
