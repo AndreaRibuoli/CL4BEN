@@ -1,0 +1,4 @@
+CMD PROMPT('Data creazione di un SAVF')
+  PARM KWD(NOMEFILE) TYPE(*CHAR) LEN(60) +
+  DFT('/QSYS.LIB/QGPL.LIB/CATALOG.FILE') +
+  PROMPT('Nome savefile')

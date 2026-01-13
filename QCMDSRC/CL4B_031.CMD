@@ -1,0 +1,3 @@
+CMD PROMPT('DB: uso di _Rupdate()')
+  PARM KWD(NOMEFILE) TYPE(*CHAR) LEN(60) +
+  DFT('CL4BEN/QCLSRC(CL4B_026)') PROMPT('Nome file')

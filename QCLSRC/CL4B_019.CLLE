@@ -1,6 +1,6 @@
 PGM     PARM(&NOMEFILE)
-DCL     VAR(&NOMEFILE)    TYPE(*CHAR) LEN(61)
-DCL     VAR(&NOMEFILE_O)  TYPE(*CHAR) LEN(61)  VALUE('elaborato.bin')
+DCL     VAR(&NOMEFILE)    TYPE(*CHAR) LEN(60)
+DCL     VAR(&NOMEFILE_O)  TYPE(*CHAR) LEN(60)  VALUE('elaborato.bin')
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
 DCL     VAR(&MODE)        TYPE(*CHAR) LEN(11)  VALUE('rb')
 DCL     VAR(&FLAG_O)      TYPE(*INT)  LEN(4)   VALUE(12)

@@ -1,35 +1,58 @@
-# CL4BEN
-ILE CL for Boomers e non
-## CL4B_001.CLLE
----
-``` CL
-PGM
-```
----
+:pnlgrp.
 
-## CL4B_002.CLLE
----
-``` CL
+.*
+:help name=m0option1.
+Opzione 1: Solo "PGM"
+:xh3.Opzione 1: Solo "PGM"
+:p.
+Un sorgente contenente la sola istruzione PGM compila comunque con 
+successo e può dar vita ad un programma a tutti gli effetti.
+:xmp.
+PGM
+:exmp.
+:ehelp.
+
+.*
+:help name=m0option2.
+Opzione 2: Con "SNDPGMMSG"
+:xh3.Opzione 2: Con "SNDPGMMSG"
+:p.
+Il sorgente si apre con PGM e chiude con ENDPGM e presenta la sola istruzione efficace SNDPGMMSG.
+Che emetterà appunto un messaggio ("Ciao ILE CL Boomers e non!").
+:xmp.
 PGM
 SNDPGMMSG MSG('Ciao ILE CL Boomers e non!')
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_003.CLLE
----
-``` CL
+.*
+:help name=m0option3.
+Opzione 3: Messaggio basato sul parametro
+:xh3.Opzione 3: Messaggio basato sul parametro
+:p.
+Il sorgente si apre con PGM PARM(&AMP.NOMEFILE) 
+e il messaggio viene costruito di conseguenza: SNDPGMMSG MSG(&AMP.NOMEFILE).
+:xmp.
 PGM      PARM(&NOMEFILE)
 DCL       VAR(&NOMEFILE) TYPE(*CHAR) LEN(30)
 SNDPGMMSG MSG(&NOMEFILE)
 DMPCLPGM
 ENDPGM
-```
----
+:exmp.
+:ehelp.
+.*
 
-## CL4B_004.CLLE
----
-``` CL
+.* 04
+:help name=m0option4.
+Opzione 4: Terminato con NULL
+:xh3.Opzione 4: Terminato con NULL
+:p.
+Rimossi gli spazi finali della variabile &amp.NOMEFILE concateniamo
+la variabile &amp.NULL inizilizzata con l'esadecimale 00.
+Così costruiamo una stringa "null-terminated".
+Il dump CL ottenuto con la "DMPCLPGM" consente la verifica.
+:xmp.
 PGM      PARM(&NOMEFILE)
 DCL       VAR(&NOMEFILE) TYPE(*CHAR) LEN(30)
 DCL       VAR(&NULL)     TYPE(*CHAR) LEN(1)  VALUE(X'00')
@@ -37,12 +60,20 @@ CHGVAR    VAR(&NOMEFILE) VALUE(&NOMEFILE *TCAT &NULL)
 SNDPGMMSG MSG(&NOMEFILE)
 DMPCLPGM
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_005.CLLE
----
-``` CL
+.* 05
+:help name=m0option5.
+Opzione 5: Con "CALLPRC" di stat() 
+:xh3.Opzione 5: Con "CALLPRC" di stat() 
+:p.
+Primo esempio di chiamata ad una API della libreria standard C, stat(), che 
+restituisce informazioni su un file riempiendo un blocco 
+passato dal chiamante. 
+Il nomefile è null-terminated giusto prima della invocazione.
+Il dump CL ottenuto con la "DMPCLPGM" consente la verifica.
+:xmp.
 PGM       PARM(&NOMEFILE)
 DCL        VAR(&NOMEFILE) TYPE(*CHAR) LEN(30)
 DCL    VAR(&NULL)         TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -52,12 +83,18 @@ SNDPGMMSG  MSG(&NOMEFILE)
 CALLPRC PRC('stat') PARM(&NOMEFILE &BUFFER)
 DMPCLPGM
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_006.CLLE
----
-``` CL
+.* 06
+:help name=m0option6.
+Opzione 6: Con campi della struct  
+:xh3.Opzione 6: Con campi della struct  
+:p.
+Affinamento della chiamata alla stat(): mediante variabili STG(*DEFINED)
+il contenuto del blocco dati viene interpretato secondo la struttura
+descritta dal linguaggio C.
+:xmp.
 PGM PARM(&NOMEFILE)
 DCL VAR(&NOMEFILE)    TYPE(*CHAR) LEN(30)
 DCL VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -81,12 +118,18 @@ CHGVAR VAR(&NOMEFILE) VALUE(&NOMEFILE *TCAT &NULL)
 CALLPRC PRC('stat') PARM(&NOMEFILE &STAT_BUF)
 DMPCLPGM
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_007.CLLE
----
-``` CL
+.* 07
+:help name=m0option7.
+Opzione 7: Messaggio con campi
+:xh3.Opzione 7: Messaggio con campi
+:p.
+L'indagine mediante "DMPCLPGM" termina: ora una selezione dei campi
+di interesse restituiti dalla stat() viene composta in un 
+messaggio.
+:xmp.
 PGM     PARM(&NOMEFILE)
 DCL     VAR(&NOMEFILE)    TYPE(*CHAR) LEN(30)
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -102,12 +145,23 @@ CHGVAR VAR(&MESSAGGIO) VALUE(&MESSAGGIO *TCAT '>, di tipo' +
                  *BCAT 'bytes')
 SNDPGMMSG MSG(&MESSAGGIO)
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_008.CLLE
----
-``` CL
+.* 08
+:help name=m0option8.
+Opzione 8: Con subroutine per altre API
+:xh3.Opzione 8: Con subroutine per altre API
+:p.
+Si introducono due nuove chiamate C: localtime() e strftime()
+invocate all'interno di una subroutine CL. L'uso della "CALLSUBR"
+consente di evitare la ripetizione di righe di codice.
+Purtroppo la SUBR 
+:link perform='DSPHELP M0OPTION9'.
+non supporta 
+:elink.
+il passaggio paramentri.
+:xmp.
 PGM PARM(&NOMEFILE)
 DCL VAR(&NOMEFILE)    TYPE(*CHAR) LEN(30)
 DCL VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -115,13 +169,12 @@ INCLUDE SRCSTMF('STAT.CLLE')
 DCL VAR(&MESSAGGIO)   TYPE(*CHAR) LEN(80)
 DCL VAR(&ANYTIME)     TYPE(*INT)  LEN(4) 
 DCL VAR(&TM_PTR)      TYPE(*PTR)  ADDRESS(*NULL) 
-DCL VAR(&QUANDO)      TYPE(*CHAR) LEN(80)
+DCL VAR(&QUANDO)      TYPE(*CHAR) LEN(80)  VALUE(80)
 DCL VAR(&QUALEN)      TYPE(*INT)  LEN(4) 
 DCL VAR(&STILE)       TYPE(*CHAR) LEN(20) VALUE('%A, %d %b %Y alle %T')
 DCL VAR(&COUNT)       TYPE(*INT)  LEN(4) 
 CHGVAR VAR(&STILE) VALUE(&STILE *TCAT &NULL)
 CHGVAR VAR(&MESSAGGIO) VALUE('Il file <' *CAT &NOMEFILE)
-CHGVAR VAR(&QUALEN) VALUE(%SIZE(&QUANDO))
 CHGVAR VAR(&NOMEFILE) VALUE(&NOMEFILE *TCAT &NULL)
 CALLPRC PRC('stat') PARM(&NOMEFILE &STAT_BUF)
 CHGVAR VAR(&MESSAGGIO) VALUE(&MESSAGGIO *TCAT '>, di tipo' *BCAT &S13_OBJTYP +
@@ -149,50 +202,74 @@ SNDPGMMSG MSG(&MESSAGGIO)
   ENDSUBR
 
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_009.CLLE
----
-``` CL
+.* 09
+:help name=M0OPTION9.
+Opzione 9: Supporto ideale (non c'è)
+:xh3.Opzione 9: Supporto ideale (non c'è)
+:p.
+Idealmente una subroutine potrebbe agire come una funzione
+definita localmente in cui le variabili passate come argomento
+e variabili definite al suo interno avessero scoping distinti.
+:xmp.
 PGM
   DCL VAR(&QUANDO)      TYPE(*CHAR) LEN(80)
   DCL VAR(&QUALEN)      TYPE(*INT)  LEN(4) 
   DCL VAR(&STILE)       TYPE(*CHAR) LEN(20) VALUE('%A, %d %b %Y alle %T')
   DCL VAR(&COUNT)       TYPE(*INT)  LEN(4) 
-  SUBR SUBR(FORMATTA)  /* PARM(&ANYTIME) */
+  SUBR SUBR(FORMATTA) PARM(&ANYTIME) 
     DCL VAR(&ANYTIME) TYPE(*INT)  LEN(4) 
     DCL VAR(&TM_PTR)  TYPE(*PTR)  ADDRESS(*NULL)   
     CALLPRC PRC('localtime') PARM(&ANYTIME) RTNVAL(&TM_PTR)
     CALLPRC PRC('strftime')  PARM(&QUANDO (&QUALEN *BYVAL) &STILE (&TM_PTR *BYVAL)) RTNVAL(&COUNT)     
   ENDSUBR
 ENDPGM  
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_010.CLLE
----
-``` CL
+.* 10
+:help name=m0option10.
+Opzione 10: Funzione specializzata
+:xh3.Opzione 10: Funzione specializzata
+:p.
+Questo codice ILE CL, una volta compilato, costituisce una funzione 
+resa disponibile in un modulo agganciabile tramite "CALLPRC".
+Il timestamp ricevuto nel parametro &amp.ANYTIME viene convertito
+e formattato secondo la specifica in &amp.STILE.
+L'esito è restituito nella variabile &amp.QUANDO. 
+:xmp.
 PGM PARM(&ANYTIME &QUANDO)
   DCL VAR(&ANYTIME)  TYPE(*INT)  LEN(4) 
   DCL VAR(&QUANDO)   TYPE(*CHAR) LEN(80)
   DCL VAR(&STILE)    TYPE(*CHAR) LEN(20) VALUE('%A, %d %b %Y alle %T')
   DCL VAR(&COUNT)    TYPE(*INT)  LEN(4) 
   DCL VAR(&NULL)     TYPE(*CHAR) LEN(1)  VALUE(X'00')
-  DCL VAR(&QUALEN)   TYPE(*INT)  LEN(4) 
+  DCL VAR(&QUALEN)   TYPE(*INT)  LEN(4)  VALUE(80)
   DCL VAR(&TM_PTR)   TYPE(*PTR)  ADDRESS(*NULL)
   CHGVAR VAR(&STILE) VALUE(&STILE *TCAT &NULL)
-  CHGVAR VAR(&QUALEN) VALUE(%SIZE(&QUANDO))
   CALLPRC PRC('localtime') PARM(&ANYTIME) RTNVAL(&TM_PTR) 
   CALLPRC PRC('strftime')  PARM(&QUANDO (&QUALEN *BYVAL) &STILE (&TM_PTR *BYVAL)) RTNVAL(&COUNT) 
   CHGVAR VAR(&QUANDO) VALUE(%SST(&QUANDO 1 &QUALEN))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_011.CLLE
----
-``` CL
+.* 11
+:help name=m0option11.
+Opzione 11: Strutturato in 2 moduli ILE CL
+:xh3.Opzione 11: Strutturato in 2 moduli ILE CL
+:p.
+La particolarità è la ripetuta invocazione della API "CL4B_010" implementata
+in 
+:link perform='DSPHELP M0OPTION10'.
+un modulo
+:elink.
+a parte. Il primo argomento viene passato direttamente nella chiamata. 
+Nei tre casi assume rispettivamente il valore di campi diversi della struttura
+restituita dalla stat().
+:xmp.
 PGM PARM(&NOMEFILE)
   DCL VAR(&NOMEFILE)    TYPE(*CHAR) LEN(30)
   DCL VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -218,12 +295,19 @@ PGM PARM(&NOMEFILE)
   CHGVAR VAR(&MESSAGGIO) VALUE(&MESSAGGIO *BCAT &QUANDO)
   SNDPGMMSG MSG(&MESSAGGIO)
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_012.CLLE
----
-``` CL
+.* 12
+:help name=m0option12.
+Opzione 12: Introduco il tipo *PTR
+:xh3.Opzione 12: Introduco il tipo *PTR
+:p.
+Simile al precente ma col passaggio della variabile &amp.STAT_BUF_P
+nella modalità *BYVAL (anzichè direttamente la &amp.STAT_BUF *BYREF).
+Il risultato è lo stesso ma offre lo spunto per una diversa definizione
+del file coinvolto dall'INCLUDE.
+:xmp.
 PGM PARM(&NOMEFILE)
   DCL VAR(&NOMEFILE)    TYPE(*CHAR) LEN(30)
   DCL VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -250,12 +334,21 @@ PGM PARM(&NOMEFILE)
   CHGVAR VAR(&MESSAGGIO) VALUE(&MESSAGGIO *BCAT &QUANDO)
   SNDPGMMSG MSG(&MESSAGGIO)
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_013.CLLE
----
-``` CL
+.* 13
+:help name=m0option13.
+Opzione 13: Strutturato in 3 moduli ILE CL
+:xh3.Opzione 13: Strutturato in 3 moduli ILE CL
+:p.
+La strutturazione in moduli procede: ora sono 3. Il nuovo 
+:link perform='DSPHELP M0OPTION14'.
+componente intermedio
+:elink.
+personalizza la eleaborazione dei campi della struttura restituita
+dalla stat() ed estesa per poter raccogliere messaggi su più livelli.
+:xmp.
 PGM PARM(&NOMEFILE)
   DCL VAR(&NOMEFILE)    TYPE(*CHAR) LEN(30)
   DCL VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -275,12 +368,23 @@ PGM PARM(&NOMEFILE)
   SNDPGMMSG MSG(&MESSAGGIO3)
   SNDPGMMSG MSG(&MESSAGGIO4)                                      
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_014.CLLE
----
-``` CL
+.* 14
+:help name=m0option14.
+Opzione 14: Modulo intermedio v1
+:xh3.Modulo intermedio v1
+:p.
+Il componente si occupa esclusivamente della predisposizione di
+messaggi per i diversi timestamp presenti nel blocco 
+restituito dalla stat().
+Si serve del
+:link perform='DSPHELP M0OPTION10'.
+modulo già presentato
+:elink.
+che ora costituisce il terzo livello di dettaglio.
+:xmp.
 PGM PARM(&BUFFER)
   DCL VAR(&BUFFER)      TYPE(*CHAR) LEN(1280)
   DCL VAR(&MESSAGGIO1)  TYPE(*CHAR) LEN(80) STG(*DEFINED) DEFVAR(&BUFFER  129)
@@ -304,12 +408,21 @@ PGM PARM(&BUFFER)
   CHGVAR VAR(&MESSAGGIO4) VALUE(&MESSAGGIO4 *BCAT &QUANDO)         
                            
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_015.CLLE
----
-``` CL
+.* 15
+:help name=m0option15.
+Opzione 15: Su 3 moduli con più messaggi
+:xh3.Opzione 15: Su 3 moduli con più messaggi
+:p.
+Ora generalizziamo la elaborazione dei messaggi (tutti supposti di lunghezza uguale)
+introducendo nella struttura passata alla 
+:link perform='DSPHELP M0OPTION16'.
+nuova funzione
+:elink.
+una variabile che specifica il numero stesso dei parametri valorizzati (&amp.&NUMBOFMSGS)
+:xmp.
 PGM PARM(&NOMEFILE)
   DCL VAR(&NOMEFILE)    TYPE(*CHAR) LEN(30)
   DCL VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -330,12 +443,19 @@ PGM PARM(&NOMEFILE)
     CHGVAR VAR(%OFFSET(&MSG_PTR)) VALUE(%OFFSET(&MSG_PTR)+80)
   ENDDO
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_016.CLLE
----
-``` CL
+.* 16
+:help name=m0option16.
+Opzione 16: Modulo intermedio v2
+:xh3.Opzione 16: Modulo intermedio v2
+:p.
+Qui cambia il layout della sezione messaggi tutti di lunghezza 80.
+Si noti che qui -per comodità- si adottano variabili STG(*DEFINED)
+specifiche da referenziale all'interno del codice per i singoli 
+messaggi.
+:xmp.
 PGM PARM(&BUFFER)
   DCL VAR(&BUFFER)      TYPE(*CHAR) LEN(1280)
   DCL VAR(&NUMBOFMSGS)  TYPE(*INT)  LEN(2)  STG(*DEFINED) DEFVAR(&BUFFER  129)
@@ -360,12 +480,19 @@ PGM PARM(&BUFFER)
   CHGVAR VAR(&MESSAGGIO4) VALUE(&MESSAGGIO4 *BCAT &QUANDO)         
   CHGVAR VAR(&NUMBOFMSGS) VALUE(4)                        
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_017.CLLE
----
-``` CL
+.* 17
+:help name=m0option17.
+Opzione 17: Uso di fopen()/fclose()
+:xh3.Opzione 17: Uso di fopen()/fclose()
+:p.
+Tramite la fopen() riceviamo un blocco dati sipezioonabile tramite
+la lettura dello spool file generato con la "DMPCLPGM".
+Lo studio della documentazione ci consente di presispore un include
+per identificare i singoli campi restituiti.
+:xmp.
 PGM     PARM(&NOMEFILE)
 DCL     VAR(&NOMEFILE)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -378,12 +505,17 @@ CALLPRC PRC('fopen') PARM(&NOMEFILE &MODE) RTNVAL(&FILE_BUF_P)
 DMPCLPGM
 CALLPRC PRC('fclose') PARM((&FILE_BUF_P *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_018.CLLE
----
-``` CL
+.* 18
+:help name=m0option18.
+Opzione 18: Aggiunta della fread()
+:xh3.Opzione 18: Aggiunta della fread()
+:p.
+Tra i campi presenti nella struttura valorizzata con la fopen() si trova &amp.F07_APPRRN
+che ci comunica il numero di record: ecco il perchè della "DOFOR". 
+:xmp.
 PGM     PARM(&NOMEFILE)
 DCL     VAR(&NOMEFILE)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -407,12 +539,18 @@ DOFOR VAR(&ROW_NO) FROM(1) TO(&F07_APPRRN)
 ENDDO
 CALLPRC PRC('fclose') PARM((&FILE_BUF_P *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_019.CLLE
----
-``` CL
+.* 19
+:help name=m0option19.
+Opzione 19: Uso open(), write() e close()
+:xh3.Opzione 19: Uso open(), write() e close()
+:p.
+Ora al fianco di fopen(), fread() e fclose() introduciamo open(), write() e close().
+Qui la concenzione per i nomi cambia: è quella dell'Integrated File System (IFS).
+Con l'esempio copiamo un file sorgente nativo in un file su IFS.
+:xmp.
 PGM     PARM(&NOMEFILE)
 DCL     VAR(&NOMEFILE)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&NOMEFILE_O)  TYPE(*CHAR) LEN(60)  VALUE('elaborato.bin')
@@ -443,12 +581,17 @@ ENDDO
 CALLPRC PRC('close') PARM((&FD *BYVAL))
 CALLPRC PRC('fclose') PARM((&FILE_BUF_P *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_020.CLLE
----
-``` CL
+.* 20
+:help name=m0option20.
+Opzione 20: Uso open(), read() e close()
+:xh3.Opzione 20: Uso open(), read() e close()
+:p.
+Qui accediamo ad un file avente record di lunghezza fissa (&amp.EFF_LEN).
+Emettiamo i singoli record.
+:xmp.
 PGM     PARM(&NOMEFILE)
 DCL     VAR(&NOMEFILE)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -457,7 +600,7 @@ DCL     VAR(&ROW_NO)      TYPE(*INT)  LEN(4)   VALUE(1)
 DCL     VAR(&RAW_ROW)     TYPE(*CHAR) LEN(312) 
 DCL     VAR(&ROW)         TYPE(*CHAR) LEN(300) STG(*DEFINED) DEFVAR(&RAW_ROW 1)  
 DCL     VAR(&COUNT)       TYPE(*INT)  LEN(4)  
-DCL     VAR(&EFF_LEN)     TYPE(*INT)  LEN(4)   VALUE(120)
+DCL     VAR(&EFF_LEN)     TYPE(*INT)  LEN(4)   VALUE(80)
 DCL     VAR(&FD)          TYPE(*INT)  LEN(4)  
 DCL     VAR(&ROW_P)       TYPE(*PTR)  ADDRESS(&RAW_ROW)
 CHGVAR  VAR(&NOMEFILE)  VALUE(&NOMEFILE *TCAT &NULL)
@@ -469,12 +612,18 @@ DOWHILE COND(&COUNT *GT 0)
 ENDDO
 CALLPRC PRC('close') PARM((&FD *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_021.CLLE
----
-``` CL
+.* 21
+:help name=m0option21.
+Opzione 21: Primi 8 byte di un SAVF
+:xh3.Opzione 21: Primi 8 byte di un SAVF
+:p.
+Qui impostiamo la lunghezza record a 528 e leggiamo un singolo record 
+da un savefile: emettiamo il numero ottenuto interpretando come
+unsigned integer di 8 byte i primi byte del savefile.
+:xmp.
 PGM     PARM(&NOMEFILE)
 DCL     VAR(&NOMEFILE)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -491,15 +640,20 @@ CHGVAR  VAR(&NOMEFILE)  VALUE(&NOMEFILE *TCAT &NULL)
 CALLPRC PRC('open')  PARM(&NOMEFILE (&FLAG *BYVAL)) RTNVAL(&FD)
 CALLPRC PRC('read') PARM((&FD *BYVAL) (&RAW_ROW) (&EFF_LEN *BYVAL) ) RTNVAL(&COUNT)
 SNDPGMMSG MSG(%CHAR(&TS))
-CALLPRC PRC('read') PARM((&FD *BYVAL) (&RAW_ROW) (&EFF_LEN *BYVAL) ) RTNVAL(&COUNT)
 CALLPRC PRC('close') PARM((&FD *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_022.CLLE
----
-``` CL
+.* 22
+:help name=m0option22.
+Opzione 22: Chiamata a "QWCCVTDT" (*DTS) 1
+:xh3.Opzione 22: Chiamata a "QWCCVTDT" (*DTS) 1
+:p.
+Qui visualizziamo il codice messaggio per l'errore ottenuto 
+invocando la "QWCCVTDT" (CALL) specificando un valore erroneo 
+per il formato data/ora restituito.
+:xmp.
 PGM
 DCL        VAR(&FORMAT_I)  TYPE(*CHAR) LEN(10) VALUE('*DTS')
 DCL        VAR(&VAR_I)     TYPE(*CHAR) LEN(8) VALUE(X'8000000000000000')
@@ -513,12 +667,16 @@ CALL PGM(QWCCVTDT) PARM(&FORMAT_I +
                         &ERRCOD)
 SNDPGMMSG MSG(&MSGID *BCAT &MSGDTA)
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_023.CLLE
----
-``` CL
+.* 23
+:help name=m0option23.
+Opzione 23: Chiamata a "QWCCVTDT" (*DTS) 2
+:xh3.Opzione 23: Chiamata a "QWCCVTDT" (*DTS) 2
+:p.
+Ora chiediamo la conversione da *DTA a *YYMD
+:xmp.
 PGM
 DCL        VAR(&FORMAT_I)  TYPE(*CHAR) LEN(10) VALUE('*DTS')
 DCL        VAR(&VAR_I)     TYPE(*CHAR) LEN(8) VALUE(X'8000000000000000')
@@ -537,12 +695,17 @@ IF COND(&BYTAVA *GT 0) THEN(SNDPGMMSG MSG(&MSGID *BCAT &MSGDTA))
 ELSE CMD(SNDPGMMSG MSG('Salvato il giorno' *BCAT &GIORNO *BCAT 'del' +
                         *BCAT &MESE *CAT '° mese dell''anno' *BCAT &ANNO))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_024.CLLE
----
-``` CL
+.* 24
+:help name=m0option24.
+Opzione 24: Data creazione di un SAVF
+:xh3.Opzione 24: Data creazione di un SAVF
+:p.
+Uniamo quato appreso nell'ultimo esempio per generare un messaggio circa la data 
+di un timestamp.
+:xmp.
 PGM     PARM(&NOMEFILE)
 DCL     VAR(&NOMEFILE)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -583,12 +746,17 @@ ELSE CMD(DO)
   SNDPGMMSG MSG(&DESC)
 ENDDO                        
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_025.CLLE
----
-``` CL
+.* 25
+:help name=m0option25.
+Opzione 25: Uso di _Ropen() e _Rclose()
+:xh3.Opzione 25: Uso di _Ropen() e _Rclose()
+:p.
+Ora utilizziamo _Ropen() e _Rclose(). 
+Sfruttiamo la "DMPCLPGM" per conoscere il contenuto di &amp.RFILE.
+:xmp.
 PGM     PARM(&FILENAME)
 DCL     VAR(&FILENAME)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&MODE)        TYPE(*CHAR) LEN(11)  VALUE('rr')
@@ -598,15 +766,19 @@ DCL     VAR(&RFILE)       TYPE(*CHAR) LEN(336) STG(*BASED)  BASPTR(&FP)
 CHGVAR  VAR(&FILENAME)  VALUE(&FILENAME *TCAT &NULL)
 CHGVAR  VAR(&MODE)      VALUE(&MODE *TCAT &NULL)
 CALLPRC PRC('_Ropen')   PARM(&FILENAME &MODE) RTNVAL(&FP)
-CALLPRC PRC('_Rclose')  PARM((&FP *BYVAL))
 DMPCLPGM
+CALLPRC PRC('_Rclose')  PARM((&FP *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_026.CLLE
----
-``` CL
+.* 26
+:help name=m0option26.
+Opzione 26: Uso struttura _RFILE
+:xh3.Opzione 26: Uso struttura _RFILE
+:p.
+Ora includiamo il dettaglio dei campi dell'_RFILE.
+:xmp.
 PGM     PARM(&FILENAME)
 DCL     VAR(&FILENAME)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&MODE)        TYPE(*CHAR) LEN(11)  VALUE('rr')
@@ -616,15 +788,22 @@ INCLUDE SRCSTMF('RFILE_P.CLLE')
 CHGVAR  VAR(&FILENAME)  VALUE(&FILENAME *TCAT &NULL)
 CHGVAR  VAR(&MODE)      VALUE(&MODE *TCAT &NULL)
 CALLPRC PRC('_Ropen')   PARM(&FILENAME &MODE) RTNVAL(&FP)
-CALLPRC PRC('_Rclose')  PARM((&FP *BYVAL))
 DMPCLPGM
+CALLPRC PRC('_Rclose')  PARM((&FP *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_027.CLLE
----
-``` CL
+.* 27
+:help name=m0option27.
+Opzione 27: Ciclo di _Rreadn() 
+:xh3.Opzione 27: Ciclo di _Rreadn() 
+:p.
+Con il presente modulo scorriamo il contenuto del file sorgente.
+All'apertura del file valorizziamo la variabile &amp.EFF_LEN al 
+valore della lunghezza record utile ( di fatto sottraendo 12 a &amp.F10_BUFLEN).
+Si noti che &amp.ROW è STG(*DEFINED) DEFVAR(&amp.RAW_ROW 13). 
+:xmp.
 PGM     PARM(&FILENAME)
 DCL     VAR(&FILENAME)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&MODE)        TYPE(*CHAR) LEN(11)  VALUE('rr')
@@ -648,12 +827,17 @@ DOWHILE COND(&F06_NUMBYT *NE -1)
 ENDDO
 CALLPRC PRC('_Rclose')  PARM((&FP *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_028.CLLE
----
-``` CL
+.* 28
+:help name=m0option28.
+Opzione 28: Con SRCSEQ e SRCDAT
+:xh3.Opzione 28: Con SRCSEQ e SRCDAT
+:p.
+Con le chiamate _R*() accediamo al record nella loro totalità.
+Possiamo dunque valorizzare anche SRCSEQ e SRCDAT.
+:xmp.
 PGM     PARM(&FILENAME)
 DCL     VAR(&FILENAME)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&MODE)        TYPE(*CHAR) LEN(11)  VALUE('rr')
@@ -680,12 +864,17 @@ DOWHILE COND(&F06_NUMBYT *NE -1)
 ENDDO
 CALLPRC PRC('_Rclose')  PARM((&FP *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_029.CLLE
----
-``` CL
+.* 29
+:help name=m0option29.
+Opzione 29: DB file creato con SQL
+:xh3.Opzione 29: DB file creato con SQL
+:p.
+Con le chiamate _R*() accediamo anche ai file creati con SQL.
+Sta a noi l'onere di specificare i sotto-campi del record.
+:xmp.
 PGM     PARM(&FILENAME)
 DCL     VAR(&FILENAME)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&MODE)        TYPE(*CHAR) LEN(11)  VALUE('rr')
@@ -738,71 +927,81 @@ DOWHILE COND(&F06_NUMBYT *NE -1)
 ENDDO
 CALLPRC PRC('_Rclose')  PARM((&FP *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_030.CLLE
----
-``` CL
-PGM     PARM(&FILENAME)
-DCL     VAR(&FILENAME)    TYPE(*CHAR) LEN(60)
-DCL     VAR(&MODE)        TYPE(*CHAR) LEN(32)  VALUE('ar+,commit=y')
-DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
-DCL     VAR(&MSG)         TYPE(*CHAR) LEN(30)  VALUE('Registrazione completata') 
-DCL     VAR(&FP)          TYPE(*PTR)  ADDRESS(*NULL)
-INCLUDE SRCSTMF('RFILE_P.CLLE')
-DCL     VAR(&RIOFB_P)     TYPE(*PTR)  ADDRESS(*NULL)
-INCLUDE SRCSTMF('RIOFB_P.CLLE')
-DCL     VAR(&RAW_ROW)     TYPE(*CHAR) LEN(312) 
-/* */
-DCL     VAR(&EMPNO)       TYPE(*CHAR) LEN(6)   STG(*DEFINED) DEFVAR(&RAW_ROW  1)  
-DCL     VAR(&FIRSTNME_L)  TYPE(*INT)  LEN(2)   STG(*DEFINED) DEFVAR(&RAW_ROW  7)  
-DCL     VAR(&FIRSTNME)    TYPE(*CHAR) LEN(12)  STG(*DEFINED) DEFVAR(&RAW_ROW  9)  
-DCL     VAR(&MIDINIT)     TYPE(*CHAR) LEN(1)   STG(*DEFINED) DEFVAR(&RAW_ROW 21)  
-DCL     VAR(&LASTNAME_L)  TYPE(*INT)  LEN(2)   STG(*DEFINED) DEFVAR(&RAW_ROW 22)  
-DCL     VAR(&LASTNAME)    TYPE(*CHAR) LEN(15)  STG(*DEFINED) DEFVAR(&RAW_ROW 24)  
-DCL     VAR(&WORKDEPT)    TYPE(*CHAR) LEN(3)   STG(*DEFINED) DEFVAR(&RAW_ROW 39)  
-DCL     VAR(&PHONENO)     TYPE(*CHAR) LEN(4)   STG(*DEFINED) DEFVAR(&RAW_ROW 42)  
-DCL     VAR(&HIREDATE)    TYPE(*CHAR) LEN(10)  STG(*DEFINED) DEFVAR(&RAW_ROW 46)  
-DCL     VAR(&JOB)         TYPE(*CHAR) LEN(8)   STG(*DEFINED) DEFVAR(&RAW_ROW 56)  
-DCL     VAR(&EDLEVEL)     TYPE(*INT)  LEN(2)   STG(*DEFINED) DEFVAR(&RAW_ROW 64)  
-DCL     VAR(&SEX)         TYPE(*CHAR) LEN(1)   STG(*DEFINED) DEFVAR(&RAW_ROW 66)  
-DCL     VAR(&BIRTHDATE)   TYPE(*CHAR) LEN(10)  STG(*DEFINED) DEFVAR(&RAW_ROW 67)  
-DCL     VAR(&SALARY)      TYPE(*DEC)  LEN(9 2) STG(*DEFINED) DEFVAR(&RAW_ROW 77)  
-DCL     VAR(&BONUS)       TYPE(*DEC)  LEN(9 2) STG(*DEFINED) DEFVAR(&RAW_ROW 82)  
-DCL     VAR(&COMM)        TYPE(*DEC)  LEN(9 2) STG(*DEFINED) DEFVAR(&RAW_ROW 87)  
-/* */
-CHGVAR  VAR(&FILENAME)  VALUE(&FILENAME *TCAT &NULL)
-CHGVAR  VAR(&MODE)      VALUE(&MODE *TCAT &NULL)
-STRCMTCTL LCKLVL(*ALL)
-CALLPRC PRC('_Ropen')   PARM(&FILENAME &MODE) RTNVAL(&FP)
-CHGVAR  VAR(&EMPNO) VALUE('300101')
-CHGVAR  VAR(&FIRSTNME_L) VALUE(6)
-CHGVAR  VAR(&FIRSTNME)   VALUE('ANDREA')
-CHGVAR  VAR(&MIDINIT)    VALUE(' ')
-CHGVAR  VAR(&LASTNAME_L) VALUE(7)
-CHGVAR  VAR(&LASTNAME)   VALUE('RIBUOLI')
-CHGVAR  VAR(&WORKDEPT)   VALUE('A00')
-CHGVAR  VAR(&PHONENO)    VALUE('8696')
-CHGVAR  VAR(&HIREDATE)   VALUE('2025-03-29')
-CHGVAR  VAR(&JOB)        VALUE('PRES')
-CHGVAR  VAR(&EDLEVEL)    VALUE(18)
-CHGVAR  VAR(&SEX)        VALUE('M')
-CHGVAR  VAR(&BIRTHDATE)  VALUE('1962-04-27')
-CHGVAR  VAR(&SALARY)     VALUE(37000)
-CHGVAR  VAR(&BONUS)      VALUE(2000)
-CHGVAR  VAR(&COMM)       VALUE(700)
-CALLPRC PRC('_Rwrite')   PARM((&FP *BYVAL) &RAW_ROW (&F10_BUFLEN *BYVAL)) RTNVAL(&RIOFB_P)
-DMPCLPGM
-CALLPRC PRC('_Rcommit')  PARM(&MSG)
-CALLPRC PRC('_Rclose')   PARM((&FP *BYVAL))
-ENDPGM
-```
----
+.* 30
+:help name=m0option30.
+Opzione 30: DB _Rwrite()/_Rcommit()
+:xh3.Opzione 30: DB _Rwrite()/_Rcommit()
+:p.
+Inseriamo un nuovo record con _Rwrite(). 
+Fondamentale impostare correttamente il &amp.MODE indicando
+la modalità e il commitment control. 
+.* :xmp.
+.* PGM     PARM(&FILENAME)
+.* DCL     VAR(&FILENAME)    TYPE(*CHAR) LEN(60)
+.* DCL     VAR(&MODE)        TYPE(*CHAR) LEN(32)  VALUE('ar+,commit=y')
+.* DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
+.* DCL     VAR(&MSG)         TYPE(*CHAR) LEN(30)  VALUE('Registrazione completata') 
+.* DCL     VAR(&FP)          TYPE(*PTR)  ADDRESS(*NULL)
+.* INCLUDE SRCSTMF('RFILE_P.CLLE')
+.* DCL     VAR(&RIOFB_P)     TYPE(*PTR)  ADDRESS(*NULL)
+.* INCLUDE SRCSTMF('RIOFB_P.CLLE')
+.* DCL     VAR(&RAW_ROW)     TYPE(*CHAR) LEN(312) 
+.* DCL     VAR(&EMPNO)       TYPE(*CHAR) LEN(6)   STG(*DEFINED) DEFVAR(&RAW_ROW  1)  
+.* DCL     VAR(&FIRSTNME_L)  TYPE(*INT)  LEN(2)   STG(*DEFINED) DEFVAR(&RAW_ROW  7)  
+.* DCL     VAR(&FIRSTNME)    TYPE(*CHAR) LEN(12)  STG(*DEFINED) DEFVAR(&RAW_ROW  9)  
+.* DCL     VAR(&MIDINIT)     TYPE(*CHAR) LEN(1)   STG(*DEFINED) DEFVAR(&RAW_ROW 21)  
+.* DCL     VAR(&LASTNAME_L)  TYPE(*INT)  LEN(2)   STG(*DEFINED) DEFVAR(&RAW_ROW 22)  
+.* DCL     VAR(&LASTNAME)    TYPE(*CHAR) LEN(15)  STG(*DEFINED) DEFVAR(&RAW_ROW 24)  
+.* DCL     VAR(&WORKDEPT)    TYPE(*CHAR) LEN(3)   STG(*DEFINED) DEFVAR(&RAW_ROW 39)  
+.* DCL     VAR(&PHONENO)     TYPE(*CHAR) LEN(4)   STG(*DEFINED) DEFVAR(&RAW_ROW 42)  
+.* DCL     VAR(&HIREDATE)    TYPE(*CHAR) LEN(10)  STG(*DEFINED) DEFVAR(&RAW_ROW 46)  
+.* DCL     VAR(&JOB)         TYPE(*CHAR) LEN(8)   STG(*DEFINED) DEFVAR(&RAW_ROW 56)  
+.* DCL     VAR(&EDLEVEL)     TYPE(*INT)  LEN(2)   STG(*DEFINED) DEFVAR(&RAW_ROW 64)  
+.* DCL     VAR(&SEX)         TYPE(*CHAR) LEN(1)   STG(*DEFINED) DEFVAR(&RAW_ROW 66)  
+.* DCL     VAR(&BIRTHDATE)   TYPE(*CHAR) LEN(10)  STG(*DEFINED) DEFVAR(&RAW_ROW 67)  
+.* DCL     VAR(&SALARY)      TYPE(*DEC)  LEN(9 2) STG(*DEFINED) DEFVAR(&RAW_ROW 77)  
+.* DCL     VAR(&BONUS)       TYPE(*DEC)  LEN(9 2) STG(*DEFINED) DEFVAR(&RAW_ROW 82)  
+.* DCL     VAR(&COMM)        TYPE(*DEC)  LEN(9 2) STG(*DEFINED) DEFVAR(&RAW_ROW 87)  
+.* CHGVAR  VAR(&FILENAME)  VALUE(&FILENAME *TCAT &NULL)
+.* CHGVAR  VAR(&MODE)      VALUE(&MODE *TCAT &NULL)
+.* STRCMTCTL LCKLVL(*ALL)
+.* CALLPRC PRC('_Ropen')   PARM(&FILENAME &MODE) RTNVAL(&FP)
+.* CHGVAR  VAR(&EMPNO) VALUE('300101')
+.* CHGVAR  VAR(&FIRSTNME_L) VALUE(6)
+.* CHGVAR  VAR(&FIRSTNME)   VALUE('ANDREA')
+.* CHGVAR  VAR(&MIDINIT)    VALUE(' ')
+.* CHGVAR  VAR(&LASTNAME_L) VALUE(7)
+.* CHGVAR  VAR(&LASTNAME)   VALUE('RIBUOLI')
+.* CHGVAR  VAR(&WORKDEPT)   VALUE('A00')
+.* CHGVAR  VAR(&PHONENO)    VALUE('8696')
+.* CHGVAR  VAR(&HIREDATE)   VALUE('2025-03-29')
+.* CHGVAR  VAR(&JOB)        VALUE('PRES')
+.* CHGVAR  VAR(&EDLEVEL)    VALUE(18)
+.* CHGVAR  VAR(&SEX)        VALUE('M')
+.* CHGVAR  VAR(&BIRTHDATE)  VALUE('1962-04-27')
+.* CHGVAR  VAR(&SALARY)     VALUE(37000)
+.* CHGVAR  VAR(&BONUS)      VALUE(2000)
+.* CHGVAR  VAR(&COMM)       VALUE(700)
+.* CALLPRC PRC('_Rwrite')   PARM((&FP *BYVAL) &RAW_ROW (&F10_BUFLEN *BYVAL)) RTNVAL(&RIOFB_P)
+.* DMPCLPGM
+.* CALLPRC PRC('_Rcommit')  PARM(&MSG)
+.* CALLPRC PRC('_Rclose')   PARM((&FP *BYVAL))
+.* ENDPGM
+.* :exmp.
+:ehelp.
 
-## CL4B_031.CLLE
----
-``` CL
+.* 31
+:help name=m0option31.
+Opzione 31: DB uso di _Rupdate()
+:xh3.Opzione 31: DB uso di _Rupdate()
+:p.
+Con questo esempio mofichiamo un sorgente rimpiazzando le 
+righe di INCLUDE che specificano uno SRCSTMF in righe 
+che adottino un SRCMBR.
+:xmp.
 PGM     PARM(&QTMPMBR)
 DCL     VAR(&QTMPMBR)     TYPE(*CHAR) LEN(60)
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
@@ -834,12 +1033,16 @@ DOWHILE COND(&F06_NUMBYT *NE -1)
 ENDDO
 CALLPRC PRC('_Rclose')  PARM((&FP *BYVAL))
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
-## CL4B_032.CLLE
----
-``` CL
+.* 32
+:help name=m0option32.
+Opzione 32: Uso di getcwd()
+:xh3.Opzione 32: Uso di getcwd()
+:p.
+Molto semplicemente uso la getcwd() per visualizzare la directory corrente. 
+:xmp.
 PGM    
 DCL     VAR(&CURPATH)     TYPE(*CHAR) LEN(512)
 DCL     VAR(&SIZE)        TYPE(*INT)  LEN(4)   VALUE(512)
@@ -847,6 +1050,15 @@ DCL     VAR(&PTR)         TYPE(*PTR)  ADDRESS(*NULL)
 CALLPRC PRC('getcwd')   PARM(&CURPATH (&SIZE *BYVAL)) RTNVAL(&PTR)
 SNDPGMMSG MSG(&CURPATH)
 ENDPGM
-```
----
+:exmp.
+:ehelp.
 
+.*
+:help name=m0option99.
+Opzione 99: Controlla cartella sviluppo
+:xh3.Opzione 99: Controlla cartella sviluppo
+:p.
+Visualizza i soli file ILE CL presenti nella cartella IFS standard.
+:ehelp.
+.*
+:epnlgrp.

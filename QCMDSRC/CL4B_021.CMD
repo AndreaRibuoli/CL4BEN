@@ -1,0 +1,4 @@
+CMD PROMPT('Primi 8 byte di un SAVF')
+  PARM KWD(NOMEFILE) TYPE(*CHAR) LEN(60) +
+  DFT('/QSYS.LIB/QGPL.LIB/CATALOG.FILE') +
+  PROMPT('Nome savefile')

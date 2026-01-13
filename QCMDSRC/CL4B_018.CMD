@@ -1,0 +1,2 @@
+CMD PROMPT('Aggiunta della fread()')
+  PARM KWD(NOMEFILE) TYPE(*CHAR) LEN(60) DFT('QGPL/QCLSRC(QSTRUP)') PROMPT('Nome file')

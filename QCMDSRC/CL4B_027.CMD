@@ -1,0 +1,3 @@
+CMD PROMPT('Ciclo di _Rreadn()')
+  PARM KWD(NOMEFILE) TYPE(*CHAR) LEN(60) +
+  DFT('QGPL/QCLSRC(QSTRUP)') PROMPT('Nome file')

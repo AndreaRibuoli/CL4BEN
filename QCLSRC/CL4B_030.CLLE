@@ -1,5 +1,5 @@
 PGM     PARM(&FILENAME)
-DCL     VAR(&FILENAME)    TYPE(*CHAR) LEN(61)
+DCL     VAR(&FILENAME)    TYPE(*CHAR) LEN(60)
 DCL     VAR(&MODE)        TYPE(*CHAR) LEN(32)  VALUE('ar+,commit=y')
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
 DCL     VAR(&MSG)         TYPE(*CHAR) LEN(30)  VALUE('Registrazione completata') 

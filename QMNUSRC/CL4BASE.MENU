@@ -1,0 +1,316 @@
+:pnlgrp. 
+.*
+:copyr.
+ILE CL for Boomers e non (autore: Andrea Ribuoli)
+:import name='*' pnlgrp=cl4base.
+.*
+:var name=zmenu. 
+.*
+:keyl name=menukeys. 
+:keyi key=F1 
+        help=helpf1 
+        action=help. 
+F1=Help
+:keyi key=F3 
+        help=exit 
+        action='exit set' 
+        varupd=no. 
+F3=Exit
+:keyi key=F4 
+        help=prompt 
+        action=prompt.
+F4=Prompt
+:keyi key=F5 
+        help=reload 
+        action='cmd reload'.
+F5=Reload
+:keyi key=F9 
+        help=retrieve 
+        action=retrieve.
+F9=Retrieve
+:keyi key=enter
+      help=enter
+      action=enter.
+:keyi key=help
+      help=help
+      action=help.
+:keyi key=home
+      help=home
+      action=home.
+:keyi key=pageup   
+      help=pageup
+      action=pageup.      
+:keyi key=pagedown   
+      help=pagedown 
+      action=pagedown.      
+:ekeyl. 
+.*
+:panel name=prmenu
+       help='menu/help'
+       keyl=menukeys
+       enter='MSG CPD9817 QCPFMSG'
+       panelid=zmenu
+       topsep=sysnam.
+ILE CL for Boomers e non
+.*
+:menu DEPTH='*'
+      SCROLL=YES
+      BOTSEP=SPACE.
+:topinst.Scegli una delle seguenti opzioni:
+.*
+:menui option=1 
+  action='CMD ?CL4B_001'
+  help=m0option1. 
+Solo "PGM"
+.*
+:menui option=2 
+  action='CMD ?CL4B_002'
+  help=m0option2. 
+Con "SNDPGMMSG"
+.*
+:menui option=3 
+  action='CMD ?CL4B_003'
+  help=m0option3. 
+Messaggio basato sul parametro
+.*
+:menui option=4 
+  action='CMD ?CL4B_004'
+  help=m0option4. 
+Terminato con NULL
+.*
+:menui option=5 
+  action='CMD ?CL4B_005'
+  help=m0option5. 
+Con "CALLPRC" di stat()
+.*
+:menui option=6 
+  action='CMD ?CL4B_006'
+  help=m0option6. 
+Con campi della struct
+.*
+:menui option=7 
+  action='CMD ?CL4B_007'
+  help=m0option7. 
+Messaggio con campi  
+.*
+:menui option=8 
+  action='CMD ?CL4B_008'
+  help=m0option8. 
+Con subroutine per altre API
+.*
+:menui option=11 
+  action='CMD ?CL4B_011'
+  help=m0option11. 
+Strutturato in 2 moduli ILE CL
+.*
+:menui option=12 
+  action='CMD ?CL4B_012'
+  help=m0option12. 
+Introduco il tipo *PTR
+.*
+:menui option=13 
+  action='CMD ?CL4B_013'
+  help=m0option13. 
+Strutturato in 3 moduli ILE CL
+.*
+:menui option=15 
+  action='CMD ?CL4B_015'
+  help=m0option15. 
+Su 3 moduli con più messaggi
+.*
+:menui option=17 
+  action='CMD ?CL4B_017'
+  help=m0option17. 
+Uso di fopen()/fclose()
+.*
+:menui option=18 
+  action='CMD ?CL4B_018'
+  help=m0option18. 
+Aggiunta della fread()
+.*
+:menui option=19 
+  action='CMD ?CL4B_019'
+  help=m0option19. 
+Uso open(), write() e close()
+.*
+:menui option=20 
+  action='CMD ?CL4B_020'
+  help=m0option20. 
+Uso open(), read() e close()
+.*
+:menui option=21 
+  action='CMD ?CL4B_021'
+  help=m0option21. 
+Primi 8 byte di un SAVF
+.*
+:menui option=22 
+  action='CMD ?CL4B_022'
+  help=m0option22. 
+Chiamata a "QWCCVTDT" (*DTS) 1
+.*
+:menui option=23 
+  action='CMD ?CL4B_023'
+  help=m0option23. 
+Chiamata a "QWCCVTDT" (*DTS) 2
+.*
+:menui option=24 
+  action='CMD ?CL4B_024'
+  help=m0option24. 
+Data creazione di un SAVF
+.*
+:menui option=25 
+  action='CMD ?CL4B_025'
+  help=m0option25. 
+Uso di _Ropen() e _Rclose()
+.*
+:menui option=26 
+  action='CMD ?CL4B_026'
+  help=m0option26. 
+Uso struttura _RFILE
+.*
+:menui option=27 
+  action='CMD ?CL4B_027'
+  help=m0option27. 
+Ciclo di _Rreadn()
+.*
+:menui option=28 
+  action='CMD ?CL4B_028'
+  help=m0option28. 
+Con SRCSEQ e SRCDAT
+.*
+:menui option=29 
+  action='CMD ?CL4B_029'
+  help=m0option29. 
+DB file creato con SQL
+.*
+:menui option=30 
+  action='CMD ?CL4B_030'
+  help=m0option31. 
+DB _Rwrite() e _Rcommit()
+.*
+:menui option=31 
+  action='CMD ?CL4B_031'
+  help=m0option31. 
+DB uso di _Rupdate()
+.*
+:menui option=32 
+  action='CMD ?CL4B_032'
+  help=m0option32. 
+Uso di getcwd()
+.*
+:menui option=99 
+  action='CMD WRKLNK OBJ(''/"home"/"AndreaRibuoli"/"CL4BEN"/"QCLSRC"/*".CLLE"'')'
+  help=m0option99. 
+Controlla cartella sviluppo
+.*
+:emenu. 
+.*
+:cmdline size=long. 
+Scelta o comando 
+.* 
+:epanel.  
+.*
+:help name=keyl.
+Tasti funzione - Aiuto
+:xh3.Tasti funzione
+:ehelp.
+.*
+:help name=helpf1.
+:parml.
+:pt.F1=Help
+:pd.
+Fornisce aiuto.
+:eparml.
+:ehelp.
+.*
+:help name=enter.
+:parml.
+:pt.Invio
+:pd.
+Invio.
+:eparml.
+:ehelp.
+.*
+:help name=help.
+:parml.
+:pt.Aiuto
+:pd.
+Fornisce aiuto su help.
+:eparml.
+:ehelp.
+.*
+:help name=home.
+:parml.
+:pt.Home
+:pd.
+Fornisce aiuto su home.
+:eparml.
+:ehelp.
+.*
+.*
+:help name=pageup.
+:parml.
+:pt.Page Up
+:pd.
+Fornisce aiuto su PAGE UP.
+:eparml.
+:ehelp.
+.*
+.*
+:help name=pagedown.
+:parml.
+:pt.Page Down
+:pd.
+Fornisce aiuto su PAGE DOWN.
+:eparml.
+:ehelp.
+.*
+:help name=exit.
+:parml.
+:pt.F3=Exit
+:pd.
+Termina il menù.
+:eparml.
+:ehelp.
+.*
+:help name=retrieve.
+:parml.
+:pt.F9=Retrieve
+:pd.
+Ripeti il comando.
+:eparml.
+:ehelp.
+.*
+:help name=prompt.
+:parml.
+:pt.F4=Prompt
+:pd.
+Fornisce supporto.
+:eparml.
+:ehelp.
+.*
+:help name=reload.
+:parml.
+:pt.F5=Reload
+:pd.
+Ricarica il pacchetto.
+:eparml.
+:ehelp.
+.*
+:help name='menu/help'.
+WebSockets e IBM i - pratica
+:p.
+Spiegazione.
+:ehelp.
+:help name='menu/nohelp'.
+Aiuto non fornito
+:xh3.Aiuto non fornito
+:p.
+Aiuto non fornito
+:ehelp.
+.*
+
+
+:epnlgrp. 
+.*
+

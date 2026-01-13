@@ -1,5 +1,5 @@
 PGM     PARM(&QTMPMBR)
-DCL     VAR(&QTMPMBR)     TYPE(*CHAR) LEN(61)
+DCL     VAR(&QTMPMBR)     TYPE(*CHAR) LEN(60)
 DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
 DCL     VAR(&IMODE)       TYPE(*CHAR) LEN(11)  VALUE('rr+')
 DCL     VAR(&DOT)         TYPE(*CHAR) LEN(1)   VALUE('.')
