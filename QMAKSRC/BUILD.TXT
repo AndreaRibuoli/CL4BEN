@@ -9,10 +9,12 @@
      -CRTMNU     MENU(&TGTLIB/$(@F)) TYPE(*UIM) SRCFILE(&SRCLIB/QMNUSRC)
 
 .QPNLSRC<FILE>.<PNLGRP>:
-        CRTPNLGRP PNLGRP(&TGTLIB/$(@F)) SRCFILE(&SRCLIB/QPNLSRC) OPTION(*NOSOURCE)
+        CRTPNLGRP PNLGRP(&TGTLIB/$(@F)) SRCFILE(&SRCLIB/QPNLSRC)
+        
+##                                                               OPTION(*NOSOURCE)
 
 .QCLSRC<FILE>.<MODULE>:                                                                       
-     CRTCLMOD MODULE(&BLDLIB/$(@F)) SRCFILE(&SRCLIB/QCLSRC) TGTRLS(&TGTRLS) OUTPUT(*NONE)     
+     CRTCLMOD MODULE(&BLDLIB/$(@F)) SRCFILE(&SRCLIB/QCLSRC) TGTRLS(&TGTRLS) OUTPUT(*PRINT)     
 
 CL_PGMS= CL4B_001<PGM> CL4B_002<PGM> CL4B_003<PGM> CL4B_004<PGM> CL4B_005<PGM> +
          CL4B_006<PGM> CL4B_007<PGM> CL4B_008<PGM>                             + 
