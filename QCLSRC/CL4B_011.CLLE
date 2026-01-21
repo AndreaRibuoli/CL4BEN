@@ -7,8 +7,12 @@ PGM PARM(&NOMEFILE)
   CHGVAR VAR(&MESSAGGIO) VALUE('Il file <' *CAT &NOMEFILE)
   CHGVAR VAR(&NOMEFILE) VALUE(&NOMEFILE *TCAT &NULL)
   CALLPRC PRC('stat') PARM(&NOMEFILE &STAT_BUF)
-  CHGVAR VAR(&MESSAGGIO) VALUE(&MESSAGGIO *TCAT '>, di tipo' *BCAT &S13_OBJTYP +
-                             *TCAT ', utilizza' *BCAT %CHAR(&S06_SIZE) *BCAT 'bytes')
+  CHGVAR VAR(&MESSAGGIO) VALUE(&MESSAGGIO *TCAT +
+                              '>, di tipo' *BCAT +
+                              &S13_OBJTYP *TCAT +
+                              ', utilizza' *BCAT +
+                              %CHAR(&S06_SIZE) *BCAT +
+                              'bytes')
   SNDPGMMSG MSG(&MESSAGGIO)
   CHGVAR VAR(&MESSAGGIO) VALUE('Ultimo accesso')
   CALLPRC PRC('CL4B_010') PARM(&S07_ATIME &QUANDO)
