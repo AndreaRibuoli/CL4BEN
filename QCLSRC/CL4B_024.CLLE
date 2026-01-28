@@ -4,37 +4,55 @@ DCL     VAR(&NULL)        TYPE(*CHAR) LEN(1)   VALUE(X'00')
 DCL     VAR(&FLAG)        TYPE(*INT)  LEN(4)   VALUE(1)
 DCL     VAR(&ROW_NO)      TYPE(*INT)  LEN(4)   VALUE(1)
 DCL     VAR(&RAW_ROW)     TYPE(*CHAR) LEN(528) 
-DCL     VAR(&ROW)         TYPE(*CHAR) LEN(512) STG(*DEFINED) DEFVAR(&RAW_ROW 1)  
-DCL     VAR(&TS)          TYPE(*UINT) LEN(8)   STG(*DEFINED) DEFVAR(&ROW  1)  
-DCL     VAR(&NBRRECS)     TYPE(*INT)  LEN(4)   STG(*DEFINED) DEFVAR(&ROW  9)  
-DCL     VAR(&VR1)         TYPE(*INT)  LEN(2)   STG(*DEFINED) DEFVAR(&ROW 11)  
-DCL     VAR(&VR2)         TYPE(*INT)  LEN(2)   STG(*DEFINED) DEFVAR(&ROW 13)  
-DCL     VAR(&F04)         TYPE(*INT)  LEN(2)   STG(*DEFINED) DEFVAR(&ROW 15)  
-DCL     VAR(&DESC)        TYPE(*CHAR) LEN(32)  STG(*DEFINED) DEFVAR(&ROW 17)  
+DCL     VAR(&ROW)         TYPE(*CHAR) LEN(512) +
+        STG(*DEFINED) DEFVAR(&RAW_ROW 1)  
+DCL     VAR(&TS)          TYPE(*UINT) LEN(8)   +
+        STG(*DEFINED) DEFVAR(&ROW  1)  
+DCL     VAR(&NBRRECS)     TYPE(*INT)  LEN(4)   +
+        STG(*DEFINED) DEFVAR(&ROW  9)  
+DCL     VAR(&VR1)         TYPE(*INT)  LEN(2)   +
+        STG(*DEFINED) DEFVAR(&ROW 11)  
+DCL     VAR(&VR2)         TYPE(*INT)  LEN(2)   +
+        STG(*DEFINED) DEFVAR(&ROW 13)  
+DCL     VAR(&F04)         TYPE(*INT)  LEN(2)   +
+        STG(*DEFINED) DEFVAR(&ROW 15)  
+DCL     VAR(&DESC)        TYPE(*CHAR) LEN(32)  +
+        STG(*DEFINED) DEFVAR(&ROW 17)  
 DCL     VAR(&COUNT)       TYPE(*INT)  LEN(4)  
 DCL     VAR(&EFF_LEN)     TYPE(*INT)  LEN(4)   VALUE(528)
 DCL     VAR(&FD)          TYPE(*INT)  LEN(4)  
 DCL     VAR(&ROW_P)       TYPE(*PTR)  ADDRESS(&RAW_ROW)
 DCL     VAR(&FORMAT_I)  TYPE(*CHAR) LEN(10) VALUE('*DTS')
 DCL     VAR(&VAR_I)       TYPE(*CHAR) LEN(8)    
-DCL     VAR(&TS2)         TYPE(*UINT) LEN(8)   STG(*DEFINED) DEFVAR(&VAR_I 1)  
+DCL     VAR(&TS2)         TYPE(*UINT) LEN(8)   +
+        STG(*DEFINED) DEFVAR(&VAR_I 1)  
 DCL     VAR(&FORMAT_O)  TYPE(*CHAR) LEN(10) VALUE('*YYMD')
 DCL     VAR(&VAR_O)     TYPE(*CHAR) LEN(20)
-DCL     VAR(&ANNO)      TYPE(*CHAR) STG(*DEFINED) LEN(4)    DEFVAR(&VAR_O  1)
-DCL     VAR(&MESE)      TYPE(*CHAR) STG(*DEFINED) LEN(2)    DEFVAR(&VAR_O  5)
-DCL     VAR(&GIORNO)    TYPE(*CHAR) STG(*DEFINED) LEN(2)    DEFVAR(&VAR_O  7)
+DCL     VAR(&ANNO)      TYPE(*CHAR) STG(*DEFINED) LEN(4) +
+        DEFVAR(&VAR_O  1)
+DCL     VAR(&MESE)      TYPE(*CHAR) STG(*DEFINED) LEN(2) +
+        DEFVAR(&VAR_O  5)
+DCL     VAR(&GIORNO)    TYPE(*CHAR) STG(*DEFINED) LEN(2) +
+        DEFVAR(&VAR_O  7)
 INCLUDE SRCSTMF('ERRCOD.CLLE')
 CHGVAR  VAR(&NOMEFILE)  VALUE(&NOMEFILE *TCAT &NULL)
-CALLPRC PRC('open')  PARM(&NOMEFILE (&FLAG *BYVAL)) RTNVAL(&FD)
-CALLPRC PRC('read') PARM((&FD *BYVAL) (&RAW_ROW) (&EFF_LEN *BYVAL) ) RTNVAL(&COUNT)
+CALLPRC PRC('open')  PARM(&NOMEFILE (&FLAG *BYVAL)) +
+        RTNVAL(&FD)
+CALLPRC PRC('read') +
+        PARM((&FD *BYVAL) (&RAW_ROW) (&EFF_LEN *BYVAL) ) +
+        RTNVAL(&COUNT)
 CALLPRC PRC('close') PARM((&FD *BYVAL))
 CHGVAR  VAR(&TS2) VALUE(&TS)
-CALL PGM(QWCCVTDT) PARM(&FORMAT_I &VAR_I &FORMAT_O &VAR_O &ERRCOD)
-IF COND(&BYTAVA *GT 0) THEN(SNDPGMMSG MSG(&MSGID *BCAT &MSGDTA))  
+CALL PGM(QWCCVTDT) +
+     PARM(&FORMAT_I &VAR_I &FORMAT_O &VAR_O &ERRCOD)
+IF COND(&BYTAVA *GT 0) +
+   THEN(SNDPGMMSG MSG(&MSGID *BCAT &MSGDTA))  
 ELSE CMD(DO)
-  SNDPGMMSG MSG('Salvato il giorno' *BCAT &GIORNO *BCAT 'del' +
-                        *BCAT &MESE *CAT '° mese dell''anno' *BCAT &ANNO)
-  SNDPGMMSG MSG('  Record . . . . . . . . . . . . . . . :' *BCAT %CHAR(&NBRRECS))                 
+  SNDPGMMSG +
+    MSG('Salvato il giorno' *BCAT &GIORNO *BCAT 'del' +
+        *BCAT &MESE *CAT '° mese dell''anno' *BCAT &ANNO)
+  SNDPGMMSG MSG('  Record . . . . . . . . . . . . . . . :' +
+                *BCAT %CHAR(&NBRRECS))                 
   SNDPGMMSG MSG(&DESC)
 ENDDO                        
 ENDPGM
